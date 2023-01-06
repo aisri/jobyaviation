@@ -88,6 +88,7 @@ public:
     void start_simulation()
     {
         while (!end_simulation_) {
+            cout << evtol_id_ << ": " << state_ << " --> ";
             switch (state_) {
             case DOCKED:
                 state_ = CRUISING;
@@ -104,7 +105,10 @@ public:
                 cout << "WARN: Invalid aircraft state" << endl;
                 break;
             }
+            cout << state_ << endl;
         }
+        cout << evtol_id_ << ": " << state_ << " --> DOCKED";
+        state_ = DOCKED;
     }
 
     void stop_simulation()
@@ -119,6 +123,20 @@ private:
         CHARGING,
         CRUISING
     };
+
+    friend std::ostream& operator<<(std::ostream& stream, const STATE& st)
+    {
+        switch (st) {
+        case DOCKED:
+            return stream << "DOCKED";
+        case CHARGING:
+            return stream << "CHARGING";
+        case CRUISING:
+            return stream << "CRUISING";
+        default:
+            return stream << "UNKNOWN";
+        }
+    }
 
     STATE state_;
     bool end_simulation_;
