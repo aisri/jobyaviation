@@ -1,48 +1,13 @@
+#include <format>
 #include <fstream>
-#include <iostream>
-#include <vector>
-
-#include <json/json.h>
 
 #include "aircraft.h"
 #include "charger.h"
+#include "simulator.h"
 
-namespace Simulator {
-class FlySpace {
-public:
-    FlySpace(unsigned sim_time, unsigned evtol_count, unsigned num_chargers, const AircraftsDB& db)
-        : evtols_count_(evtol_count)
-        , simulation_time_(sim_time)
-        , db_(db)
-        , bay_(new ChargingBay(num_chargers))
-    {
-    }
+#include <json/json.h>
 
-    void simulate()
-    {
-    }
-
-    void print_stats()
-    {
-    }
-
-private:
-    unsigned evtols_count_;
-    unsigned simulation_time_;
-    const AircraftsDB& db_;
-    std::shared_ptr<ChargingBay> bay_;
-};
-
-class AircraftsDB {
-public:
-    AircraftsDB(Json::Value evtol_db)
-    {
-    }
-
-private:
-    vector<AirCraftInfo> evtol_crafts;
-};
-};
+using namespace std;
 
 int main(int argc, char** argv)
 {
@@ -56,7 +21,9 @@ int main(int argc, char** argv)
     Json::Value simconf;
     jsonfs >> simconf;
 
-    Simulator::AircraftsDB myDB { simconf["companies"] };
+    // test driven development. ability to change test parameters using json DB
+    // used JSON since, it is ubiquitous. can also have a csv file to lower typing
+    Simulator::AirCraftsDB myDB { simconf["companies"] };
 
     Simulator::FlySpace sky_simulator(
         simconf["simulation_time"].asUInt(),
