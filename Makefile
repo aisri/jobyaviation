@@ -6,7 +6,8 @@ SIMDIR=sim
 CPP=clang++
 PROG=evtolsim
 LIBS=jsoncpp
-EVTOLDB=data/aircrafts.json
+
+SIMCONF=data/simulation.json
 
 SRCS=$(wildcard src/*.cpp)
 LINK=$(addprefix -L,$(LIBS))
@@ -24,7 +25,7 @@ build: $(OBJS)
 	$(CPP) $(LINK) -o $(APPL)
 
 run:
-	$(APPL) $(EVTOLDB)
+	$(APPL) $(SIMCONF)
 
 default: build
 
