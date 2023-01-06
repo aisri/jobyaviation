@@ -1,2 +1,2 @@
 # jobyaviation
-simulate flights 
+simulate eVTOL aircrafts navigation pattern

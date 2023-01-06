@@ -1,0 +1,42 @@
+{
+    "alpha": {
+        "cruise-speed": 120, // mph
+        "battery-capacity": 320, // kWh
+        "time-to-charge": 0.6, // hours
+        "energy-use-at-cruise": 1.6, // 1.6 kWh/mile
+        "passenger-count": 4, // number
+        "prob-faults-per-hour": 0.25 // ratio
+    },
+    "bravo": {
+        "cruise-speed": 100, // mph
+        "battery-capacity": 100, // kWh
+        "time-to-charge": 0.2, // hours
+        "energy-use-at-cruise": 1.5, // 1.6 kWh/mile
+        "passenger-count": 5, // number
+        "prob-faults-per-hour": 0.10 // ratio
+    },
+    "charlie": {
+        "cruise-speed": 160, // mph
+        "battery-capacity": 220, // kWh
+        "time-to-charge": 0.8, // hours
+        "energy-use-at-cruise": 2.2, // 1.6 kWh/mile
+        "passenger-count": 3, // number
+        "prob-faults-per-hour": 0.05 // ratio
+    },
+    "delta": {
+        "cruise-speed": 90, // mph
+        "battery-capacity": 120, // kWh
+        "time-to-charge": 0.62, // hours
+        "energy-use-at-cruise": 0.8, // 1.6 kWh/mile
+        "passenger-count": 2, // number
+        "prob-faults-per-hour": 0.22 // ratio
+    },
+    "echo": {
+        "cruise-speed": 30, // mph
+        "battery-capacity": 150, // kWh
+        "time-to-charge": 0.3, // hours
+        "energy-use-at-cruise": 5.8, // 1.6 kWh/mile
+        "passenger-count": 2, // number
+        "prob-faults-per-hour": 0.61 // ratio
+    }
+}
