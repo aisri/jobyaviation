@@ -1,3 +1,5 @@
+#ifndef _CHARGER_H_
+#define _CHARGER_H_
 #include <semaphore>
 
 using namespace std;
@@ -23,3 +25,5 @@ public:
     }
 };
 };
+
+#endif

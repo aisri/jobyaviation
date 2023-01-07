@@ -1,5 +1,8 @@
+#ifndef _SIMULATOR_H_
+#define _SIMULATOR_H_
+
 #include <format>
-#include <fstream>
+#include <iomanip>
 #include <iostream>
 #include <thread>
 #include <unordered_map>
@@ -10,6 +13,50 @@
 #include "aircraft.h"
 
 namespace Simulator {
+
+class AirCraftsDB {
+public:
+    AirCraftsDB(Json::Value evtol_companies)
+    {
+        for (const auto& craft : evtol_companies) {
+            auto shared = std::make_shared<AirCraftInfo>(
+                craft["company"].asString(),
+                craft["cruise-speed"].asUInt(),
+                craft["battery-capacity"].asUInt(),
+                craft["time-to-charge"].asFloat(),
+                craft["energy-use-at-cruise"].asFloat(),
+                craft["passenger-count"].asUInt(),
+                craft["prob-faults-per-hour"].asFloat());
+
+            evtol_crafts_.push_back(shared);
+        }
+    }
+
+    void print_database() const
+    {
+        for (const auto& craft : evtol_crafts_) {
+            cout << *craft.get() << endl;
+        }
+    }
+
+    std::shared_ptr<AirCraftInfo> get_aircraft_at_index(int index) const
+    {
+        int size = static_cast<int>(evtol_crafts_.size());
+        if (index < size) {
+            return evtol_crafts_[index];
+        }
+        return nullptr;
+    }
+
+    unsigned get_aircraft_count() const
+    {
+        return evtol_crafts_.size();
+    }
+
+private:
+    vector<shared_ptr<AirCraftInfo>> evtol_crafts_;
+};
+
 class FlySpace {
 public:
     FlySpace(unsigned sim_time, unsigned evtol_count, unsigned num_chargers, const AirCraftsDB& db)
@@ -24,24 +71,25 @@ public:
     {
         srand(time(0));
 
-        for (int i = 0; i < evtols_count_; i++) {
+        for (unsigned i = 0; i < evtols_count_; i++) {
             auto index = rand() % db_.get_aircraft_count();
             auto craft_info = db_.get_aircraft_at_index(index);
 
-            deployed_crafts_.push_back(AirCraft(
+            deployed_crafts_.push_back(
+                make_unique<AirCraft>(
                 static_cast<unsigned>(deployed_crafts_.size()),
                 craft_info, bay_));
 
             // kick off aircraft thread's for simulation. detach them to
             // run independently w/o our intervention.
-            std::thread([&] { deployed_crafts_.back().start_simulation(); }).detach();
+            std::thread([&] { deployed_crafts_.back()->start_simulation(); }).detach();
         }
 
         // lets sleep for simulation time to finish and
         std::this_thread::sleep_for(std::chrono::minutes(simulation_time_));
 
         for (auto& dcraft : deployed_crafts_) {
-            dcraft.stop_simulation();
+            dcraft->stop_simulation();
         }
     }
 
@@ -49,7 +97,7 @@ public:
     {
         std::unordered_map<string, AirCraftStats> results;
         for (auto& dcraft : deployed_crafts_) {
-            auto stats = dcraft.get_stats();
+            auto stats = dcraft->get_stats();
             auto it = results.find(stats.company);
             if (it == results.end()) {
                 results[stats.company] = stats;
@@ -70,8 +118,7 @@ public:
         };
 
         string fmt = "{:10}{:8}{:12}{:12}{:10}{:16}{:8}";
-        cout << "COMPANY", "#EVTOLS", "FLIGHT-TIME", "CHARGE-TIME", "DISTANCE",
-            "PASSENGER-MILES", "FAULTS";
+        cout << "COMPANY #EVTOLS FLIGHT-TIME CHARGE-TIME DISTANCE PASSENGER-MILES FAULTS";
         for (const auto& [company, stats] : results) {
             unsigned cnt = stats.count;
             format(company, cnt,
@@ -89,50 +136,9 @@ private:
 
     const AirCraftsDB& db_;
     std::shared_ptr<ChargingBay> bay_;
-    vector<AirCraft> deployed_crafts_;
-};
-
-
-class AirCraftsDB {
-public:
-    AirCraftsDB(Json::Value evtol_companies)
-    {
-        for (const auto& craft : evtol_companies) {
-            auto shared = std::make_shared<AirCraftInfo>(new AirCraftInfo(
-                craft["company"].asString(),
-                craft["cruise-speed"].asUInt(),
-                craft["battery-capacity"].asUInt(),
-                craft["time-to-charge"].asFloat(),
-                craft["energy-use-at-cruise"].asFloat(),
-                craft["passenger-count"].asUInt(),
-                craft["prob-faults-per-hour"].asFloat()));
-
-            evtol_crafts_.push_back(shared);
-        }
-    }
-
-    void print_database() const
-    {
-        for (const auto& craft : evtol_crafts_) {
-            cout << craft << endl;
-        }
-    }
-
-    std::shared_ptr<AirCraftInfo> get_aircraft_at_index(int index) const
-    {
-        if (index < evtol_crafts_.size()) {
-            return evtol_crafts_[index];
-        }
-        return make_shared<AirCraftInfo>();
-    }
-
-    unsigned get_aircraft_count() const
-    {
-        return evtol_crafts_.size();
-    }
-
-private:
-    vector<shared_ptr<AirCraftInfo>> evtol_crafts_;
+    vector<std::unique_ptr<AirCraft>> deployed_crafts_;
 };
 
 };
+
+#endif

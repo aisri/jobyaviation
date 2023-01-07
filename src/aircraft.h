@@ -1,3 +1,6 @@
+#ifndef _AIRCRAFT_H_
+#define _AIRCRAFT_H_
+
 #include <chrono>
 #include <cmath>
 #include <condition_variable>
@@ -25,17 +28,15 @@ struct AirCraftStats {
 
 class AirCraftInfo {
 public:
-    const unsigned time_to_charge_;
-    const std::chrono::milliseconds fight_time_per_charge_;
 
     AirCraftInfo(string builder, unsigned cruise_speed, unsigned battery_capacity, float charge_time, float energy_per_mile, unsigned num_passenger, float faults_per_hour)
         : company_(builder)
         , cruise_speed_(cruise_speed)
-        , battery_capacity_(battery_capacity)
-        , time_to_charge_(charge_time * 1000)
-        , energy_use_at_cruise_(energy_per_mile)
-        , passenger_count_(num_passenger)
         , faults_per_hour_(faults_per_hour)
+        , passenger_count_(num_passenger)
+        , time_to_charge_(charge_time * 1000)
+        , battery_capacity_(battery_capacity)
+        , energy_use_at_cruise_(energy_per_mile)
         , fight_time_per_charge_(get_flight_time_per_charge())
     {
     }
@@ -44,10 +45,12 @@ public:
     const unsigned cruise_speed_;
     const float faults_per_hour_;
     const unsigned passenger_count_;
-
-private:
+    const unsigned time_to_charge_;
     const unsigned battery_capacity_;
     const float energy_use_at_cruise_;
+    const std::chrono::milliseconds fight_time_per_charge_;
+
+private:
 
     const std::chrono::milliseconds get_flight_time_per_charge()
     {
@@ -63,8 +66,8 @@ private:
 class AirCraft {
 public:
     AirCraft(unsigned id, std::shared_ptr<AirCraftInfo>& info, std::shared_ptr<ChargingBay> bay)
-        : evtol_id_(id)
-        , craft_info_(info)
+        : craft_info_(info)
+        , evtol_id_(id)
     {
         // using fly-light design pattern to separate out const info from
         // changing parameters
@@ -239,3 +242,5 @@ std::ostream& operator<<(std::ostream& stream, const AirCraft& craft)
 }
 
 };
+
+#endif

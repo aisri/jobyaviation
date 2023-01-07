@@ -1,52 +1,52 @@
 {
-    "simulation_time": 3, // hours
-    "evtols_count": 20, // number of eVTOL aircrafts
-    "max_chargers": 3, // total chargers available
+    "simulation_time": 3,
+    "evtols_count": 20,
+    "max_chargers": 3,
     "companies": [
         {
             "company": "alpha",
-            "cruise-speed": 120, // mph
-            "battery-capacity": 320, // kWh
-            "time-to-charge": 0.6, // hours
-            "energy-use-at-cruise": 1.6, // kWh/mile
-            "passenger-count": 4, // number
-            "prob-faults-per-hour": 0.25 // ratio
+            "cruise-speed": 120,
+            "battery-capacity": 320,
+            "time-to-charge": 0.6,
+            "energy-use-at-cruise": 1.6,
+            "passenger-count": 4,
+            "prob-faults-per-hour": 0.25
         },
         {
             "company": "bravo",
-            "cruise-speed": 100, // mph
-            "battery-capacity": 100, // kWh
-            "time-to-charge": 0.2, // hours
-            "energy-use-at-cruise": 1.5, // kWh/mile
-            "passenger-count": 5, // number
-            "prob-faults-per-hour": 0.10 // ratio
+            "cruise-speed": 100,
+            "battery-capacity": 100,
+            "time-to-charge": 0.2,
+            "energy-use-at-cruise": 1.5,
+            "passenger-count": 5,
+            "prob-faults-per-hour": 0.10
         },
         {
             "company": "charlie",
-            "cruise-speed": 160, // mph
-            "battery-capacity": 220, // kWh
-            "time-to-charge": 0.8, // hours
-            "energy-use-at-cruise": 2.2, // kWh/mile
-            "passenger-count": 3, // number
-            "prob-faults-per-hour": 0.05 // ratio
+            "cruise-speed": 160,
+            "battery-capacity": 220,
+            "time-to-charge": 0.8,
+            "energy-use-at-cruise": 2.2,
+            "passenger-count": 3,
+            "prob-faults-per-hour": 0.05
         },
         {
             "company": "delta",
-            "cruise-speed": 90, // mph
-            "battery-capacity": 120, // kWh
-            "time-to-charge": 0.62, // hours
-            "energy-use-at-cruise": 0.8, // kWh/mile
-            "passenger-count": 2, // number
-            "prob-faults-per-hour": 0.22 // ratio
+            "cruise-speed": 90,
+            "battery-capacity": 120,
+            "time-to-charge": 0.62,
+            "energy-use-at-cruise": 0.8,
+            "passenger-count": 2,
+            "prob-faults-per-hour": 0.22
         },
         {
             "company": "echo",
-            "cruise-speed": 30, // mph
-            "battery-capacity": 150, // kWh
-            "time-to-charge": 0.3, // hours
-            "energy-use-at-cruise": 5.8, // kWh/mile
-            "passenger-count": 2, // number
-            "prob-faults-per-hour": 0.61 // ratio
+            "cruise-speed": 30,
+            "battery-capacity": 150,
+            "time-to-charge": 0.3,
+            "energy-use-at-cruise": 5.8,
+            "passenger-count": 2,
+            "prob-faults-per-hour": 0.61
         }
     ]
 }

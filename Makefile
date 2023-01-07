@@ -1,6 +1,5 @@
 .PHONY: all build run clean default
 
-OPDIR=build
 SIMDIR=sim
 
 CPP=clang++
@@ -10,19 +9,18 @@ LIBS=jsoncpp
 SIMCONF=data/simulation.json
 
 SRCS=$(wildcard src/*.cpp)
-LINK=$(addprefix -L,$(LIBS))
+LINK=$(addprefix -l,$(LIBS))
 INCS=$(addprefix -I,$(wildcard src/*.h))
-OBJS=$(addprefix $(OPDIR)/, $(notdir $(patsubst %.cpp,%.o,$(SRCS))))
+
+OPTS=-std=c++20 -Wall -Wextra
 
 APPL=$(SIMDIR)/$(PROG)
 
-$(info $(SRCS) $(OBJS) $(INCS) $(LINK))
+# $(info $(SRCS) $(OBJS) $(INCS) $(LINK))
 
-$(OBJS):
-	$(CPP) $(INCS) -o $@
-
-build: $(OBJS)
-	$(CPP) $(LINK) -o $(APPL)
+build:
+	mkdir -p $(SIMDIR)
+	$(CPP) $(SRCS) $(OPTS) $(LINK) -o $(APPL)
 
 run:
 	$(APPL) $(SIMCONF)
@@ -30,7 +28,6 @@ run:
 default: build
 
 clean:
-	rm -rf $(OPDIR)
 	rm -rf $(SIMDIR)
 
 all: clean build run
