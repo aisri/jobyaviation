@@ -22,7 +22,6 @@ int main(int argc, char** argv)
     }
 
     std::ifstream jsonfs(argv[1], std::ifstream::binary);
-    Json::Reader reader;
     Json::Value simconf;
     jsonfs >> simconf;
 

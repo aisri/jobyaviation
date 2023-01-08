@@ -94,16 +94,24 @@ public:
         std::this_thread::sleep_for(std::chrono::seconds(simulation_time));
 
         // stop simulation
-        cout << "*** Stopping Simulation ***" << endl;
+        cout << endl << "*** Stopping Simulation ***" << endl;
         for (auto& dcraft : deployed_crafts_) {
             dcraft->stop_simulation();
         }
 
         // print simulation stats
-        cout << "*** Simulation Report ***" << endl;
+        cout << endl << "*** Simulation Report ***" << endl;
         std::this_thread::sleep_for(std::chrono::seconds(1));
         print_stats();
     }
+
+private:
+    unsigned evtols_count_;
+    float simulation_time_;
+
+    const AirCraftsDB& db_;
+    std::shared_ptr<ChargingBay> bay_;
+    vector<unique_ptr<AirCraft>> deployed_crafts_;
 
     void print_stats()
     {
@@ -138,18 +146,10 @@ public:
             stats.charge_time /= (cnt * 1000);
             stats.total_distance /= (cnt * 1000);
             stats.passenger_miles *= cnt;
-            stats.fault_count /= (cnt * 1000);
+            stats.fault_count /= cnt;
             cout << stats;
         }
     }
-
-private:
-    unsigned evtols_count_;
-    float simulation_time_;
-
-    const AirCraftsDB& db_;
-    std::shared_ptr<ChargingBay> bay_;
-    vector<unique_ptr<AirCraft>> deployed_crafts_;
 };
 
 };

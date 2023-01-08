@@ -23,7 +23,7 @@ struct AirCraftStats {
     unsigned charge_time;
     unsigned fault_count;
     unsigned total_distance;
-    unsigned passenger_miles;
+    unsigned long passenger_miles;
     friend std::ostream& operator<<(std::ostream& stream, const AirCraftStats& stats);
 };
 
@@ -74,6 +74,18 @@ private:
     friend std::ostream& operator<<(std::ostream& stream, const AirCraftInfo& craft);
 };
 
+std::ostream& operator<<(std::ostream& stream, const AirCraftInfo& craft)
+{
+    return stream << "\naircraft maker    : " << craft.company_
+                  << "\ncruise speed      : " << craft.cruise_speed_
+                  << "\nbattery capacity  : " << craft.battery_capacity_
+                  << "\ntime to charge    : " << craft.time_to_charge_
+                  << "\nenergy per mile   : " << craft.energy_use_at_cruise_
+                  << "\npassenger count   : " << craft.passenger_count_
+                  << "\nfaults per hour   : " << craft.faults_per_hour_
+                  << "\nflight time/charge: " << craft.fight_time_per_charge_.count();
+}
+
 class AirCraft {
 public:
     AirCraft(unsigned id, const AirCraftInfo& info, std::shared_ptr<ChargingBay> bay)
@@ -116,7 +128,7 @@ public:
         return flying_time_;
     }
 
-    AirCraftStats get_stats()
+    AirCraftStats get_stats() const
     {
         auto stats = AirCraftStats();
         stats.company = craft_info_.company_;
@@ -131,6 +143,7 @@ public:
     void start_simulation()
     {
         while (!end_simulation_) {
+            cout << "." << std::flush;
             switch (state_) {
             case DOCKED:
                 state_ = CRUISING;
@@ -198,7 +211,7 @@ private:
         cv.wait_for(lock, craft_info_.fight_time_per_charge_, predicate);
         auto end = chrono::system_clock::now();
 
-        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+        auto duration = chrono::duration_cast<chrono::milliseconds>(end - start);
 
         // track time spent flying - its possible simulation ends here,
         // so explicitly profile time taken after condition_variable returns
@@ -222,7 +235,7 @@ private:
         charging_bay_->give_charger();
 
         auto end = chrono::system_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+        auto duration = chrono::duration_cast<chrono::milliseconds>(end - start);
 
         // total time spent for charging including wait
         charging_time_ += duration.count();
@@ -230,18 +243,6 @@ private:
 
     friend std::ostream& operator<<(std::ostream& stream, const AirCraft& craft);
 };
-
-std::ostream& operator<<(std::ostream& stream, const AirCraftInfo& craft)
-{
-    return stream << "\naircraft maker    : " << craft.company_
-                  << "\ncruise speed      : " << craft.cruise_speed_
-                  << "\nbattery capacity  : " << craft.battery_capacity_
-                  << "\ntime to charge    : " << craft.time_to_charge_
-                  << "\nenergy per mile   : " << craft.energy_use_at_cruise_
-                  << "\npassenger count   : " << craft.passenger_count_
-                  << "\nfaults per hour   : " << craft.faults_per_hour_
-                  << "\nflight time/charge: " << craft.fight_time_per_charge_.count();
-}
 
 std::ostream& operator<<(std::ostream& stream, const AirCraft& craft)
 {

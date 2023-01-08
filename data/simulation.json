@@ -1,5 +1,5 @@
 {
-    "simulation_time": 0.125,
+    "simulation_time": 0.25,
     "evtols_count": 20,
     "max_chargers": 4,
     "companies": [
