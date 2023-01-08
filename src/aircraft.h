@@ -32,8 +32,8 @@ std::ostream& operator<<(std::ostream& stream, const AirCraftStats& stats)
     return stream << std::setw(10) << stats.company
                   << std::setw(8) << stats.count
                   << std::fixed << std::setprecision(3)
-                  << std::setw(12) << stats.fly_time
-                  << std::setw(12) << stats.charge_time
+                  << std::setw(15) << stats.fly_time
+                  << std::setw(15) << stats.charge_time
                   << std::setw(10) << stats.total_distance
                   << std::setw(16) << stats.passenger_miles
                   << std::setw(8) << stats.fault_count << endl;
@@ -196,7 +196,9 @@ private:
 
         auto start = chrono::system_clock::now();
         cv.wait_for(lock, craft_info_.fight_time_per_charge_, predicate);
-        auto duration = chrono::system_clock::now() - start;
+        auto end = chrono::system_clock::now();
+
+        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
 
         // track time spent flying - its possible simulation ends here,
         // so explicitly profile time taken after condition_variable returns
@@ -219,7 +221,8 @@ private:
         // release charger
         charging_bay_->give_charger();
 
-        auto duration = chrono::system_clock::now() - start;
+        auto end = chrono::system_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
 
         // total time spent for charging including wait
         charging_time_ += duration.count();

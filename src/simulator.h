@@ -100,6 +100,7 @@ public:
         }
 
         // print simulation stats
+        cout << "*** Simulation Report ***" << endl;
         std::this_thread::sleep_for(std::chrono::seconds(1));
         print_stats();
     }
@@ -109,6 +110,7 @@ public:
         std::unordered_map<string, AirCraftStats> results;
         for (auto& dcraft : deployed_crafts_) {
             auto stats = dcraft->get_stats();
+            cout << stats;
             auto it = results.find(stats.company);
             if (it == results.end()) {
                 results[stats.company] = stats;
@@ -124,17 +126,17 @@ public:
         }
 
         cout << std::setw(10) << "COMPANY" << std::setw(8) << "#CRAFTS"
-             << std::setw(12) << "FLIGHT-TIME" << std::setw(12) << "CHARGE-TIME"
+             << std::setw(15) << "FLIGHT-TIME:ms" << std::setw(15) << "CHARGE-TIME:ms"
              << std::setw(10) << "DISTANCE" << std::setw(16) << "PASSENGER-MILES"
              << std::setw(8) << "FAULTS" << endl;
 
         for (auto& [company, stats] : results) {
             unsigned cnt = stats.count;
-            stats.fly_time /= cnt;
-            stats.charge_time /= cnt;
-            stats.total_distance /= cnt;
-            stats.passenger_miles *= cnt;
-            stats.fault_count /= cnt;
+            stats.fly_time /= (cnt * 1000);
+            stats.charge_time /= (cnt * 1000);
+            stats.total_distance /= (cnt * 1000);
+            stats.passenger_miles *= (cnt / 1000);
+            stats.fault_count /= (cnt * 1000);
             cout << stats;
         }
     }
