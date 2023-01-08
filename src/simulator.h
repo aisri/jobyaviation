@@ -19,7 +19,7 @@ public:
     AirCraftsDB(Json::Value evtol_companies)
     {
         for (const auto& craft : evtol_companies) {
-            auto shared = std::make_shared<AirCraftInfo>(
+            auto evtol = AirCraftInfo(
                 craft["company"].asString(),
                 craft["cruise-speed"].asUInt(),
                 craft["battery-capacity"].asUInt(),
@@ -28,24 +28,25 @@ public:
                 craft["passenger-count"].asUInt(),
                 craft["prob-faults-per-hour"].asFloat());
 
-            evtol_crafts_.push_back(shared);
+            evtol_crafts_.push_back(evtol);
         }
     }
 
     void print_database() const
     {
         for (const auto& craft : evtol_crafts_) {
-            cout << *craft.get() << endl;
+            cout << craft << endl;
         }
     }
 
-    std::shared_ptr<AirCraftInfo> get_aircraft_at_index(int index) const
+    const AirCraftInfo& get_aircraft_at_index(int index) const
     {
         int size = static_cast<int>(evtol_crafts_.size());
         if (index < size) {
             return evtol_crafts_[index];
+        } else {
+            return evtol_crafts_[0];
         }
-        return nullptr;
     }
 
     unsigned get_aircraft_count() const
@@ -54,12 +55,12 @@ public:
     }
 
 private:
-    vector<shared_ptr<AirCraftInfo>> evtol_crafts_;
+    vector<const AirCraftInfo> evtol_crafts_;
 };
 
 class FlySpace {
 public:
-    FlySpace(unsigned sim_time, unsigned evtol_count, unsigned num_chargers, const AirCraftsDB& db)
+    FlySpace(float sim_time, unsigned evtol_count, unsigned num_chargers, const AirCraftsDB& db)
         : evtols_count_(evtol_count)
         , simulation_time_(sim_time)
         , db_(db)
@@ -69,28 +70,38 @@ public:
 
     void simulate()
     {
+        // create aircraft objects
         srand(time(0));
-
+        auto num_evtol_builders = db_.get_aircraft_count();
         for (unsigned i = 0; i < evtols_count_; i++) {
-            auto index = rand() % db_.get_aircraft_count();
-            auto craft_info = db_.get_aircraft_at_index(index);
-
-            deployed_crafts_.push_back(
-                make_unique<AirCraft>(
-                static_cast<unsigned>(deployed_crafts_.size()),
-                craft_info, bay_));
-
-            // kick off aircraft thread's for simulation. detach them to
-            // run independently w/o our intervention.
-            std::thread([&] { deployed_crafts_.back()->start_simulation(); }).detach();
+            auto index = rand() % num_evtol_builders;
+            deployed_crafts_.emplace_back(
+                new AirCraft(i, db_.get_aircraft_at_index(index), bay_));
+            // cout << *deployed_crafts_[i] << endl; /* dump deployed aircraft */
         }
 
-        // lets sleep for simulation time to finish and
-        std::this_thread::sleep_for(std::chrono::minutes(simulation_time_));
+        cout << "*** Starting Simulation ***" << endl;
+        // kick off aircraft thread's for simulation. detach them to
+        // run independently w/o our intervention.
+        for (const auto& evtol_craft : deployed_crafts_) {
+            cout << ">>> Deploying AirCraft <<<";
+            cout << *evtol_craft << endl;
+            std::thread([&] { evtol_craft->start_simulation(); }).detach();
+        }
 
+        // lets sleep for simulation time to finish
+        unsigned simulation_time = static_cast<unsigned>(simulation_time_ * 60.0);
+        std::this_thread::sleep_for(std::chrono::seconds(simulation_time));
+
+        // stop simulation
+        cout << "*** Stopping Simulation ***" << endl;
         for (auto& dcraft : deployed_crafts_) {
             dcraft->stop_simulation();
         }
+
+        // print simulation stats
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+        print_stats();
     }
 
     void print_stats()
@@ -111,32 +122,30 @@ public:
                 it->second.count++;
             }
         }
-        auto format = [](string bd, unsigned num, float ft, float ct, float d, float pm, float fl) {
-            cout << std::setw(10) << bd << std::setw(8) << num << std::setw(12) << ft
-                 << std::setw(12) << ct << std::setw(10) << d << std::setw(16) << pm
-                 << std::setw(8) << fl << endl;
-        };
 
-        string fmt = "{:10}{:8}{:12}{:12}{:10}{:16}{:8}";
-        cout << "COMPANY #EVTOLS FLIGHT-TIME CHARGE-TIME DISTANCE PASSENGER-MILES FAULTS";
-        for (const auto& [company, stats] : results) {
+        cout << std::setw(10) << "COMPANY" << std::setw(8) << "#CRAFTS"
+             << std::setw(12) << "FLIGHT-TIME" << std::setw(12) << "CHARGE-TIME"
+             << std::setw(10) << "DISTANCE" << std::setw(16) << "PASSENGER-MILES"
+             << std::setw(8) << "FAULTS" << endl;
+
+        for (auto& [company, stats] : results) {
             unsigned cnt = stats.count;
-            format(company, cnt,
-                stats.fly_time / cnt,
-                stats.charge_time / cnt,
-                stats.total_distance / cnt,
-                stats.passenger_miles * cnt,
-                stats.fault_count / cnt);
+            stats.fly_time /= cnt;
+            stats.charge_time /= cnt;
+            stats.total_distance /= cnt;
+            stats.passenger_miles *= cnt;
+            stats.fault_count /= cnt;
+            cout << stats;
         }
     }
 
 private:
     unsigned evtols_count_;
-    unsigned simulation_time_;
+    float simulation_time_;
 
     const AirCraftsDB& db_;
     std::shared_ptr<ChargingBay> bay_;
-    vector<std::unique_ptr<AirCraft>> deployed_crafts_;
+    vector<unique_ptr<AirCraft>> deployed_crafts_;
 };
 
 };

@@ -12,7 +12,7 @@ SRCS=$(wildcard src/*.cpp)
 LINK=$(addprefix -l,$(LIBS))
 INCS=$(addprefix -I,$(wildcard src/*.h))
 
-OPTS=-std=c++20 -Wall -Wextra
+OPTS=-std=c++20 -Wall -Wextra -g
 
 APPL=$(SIMDIR)/$(PROG)
 

@@ -29,16 +29,15 @@ int main(int argc, char** argv)
     // test driven development. ability to change test parameters using json DB
     // used JSON since, it is ubiquitous. can also have a csv file to lower typing
     AirCraftsDB myDB (simconf["companies"]);
-    myDB.print_database();
+    // myDB.print_database();
 
-    // Simulator::FlySpace sky_simulator(
-    //     simconf["simulation_time"].asUInt(),
-    //     simconf["evtols_count"].asUInt(),
-    //     simconf["max_chargers"].asUInt(),
-    //     myDB);
+    Simulator::FlySpace sky_simulator(
+        simconf["simulation_time"].asFloat(),
+        simconf["evtols_count"].asUInt(),
+        simconf["max_chargers"].asUInt(),
+        myDB);
 
-    // sky_simulator.simulate();
-    // sky_simulator.print_stats();
+    sky_simulator.simulate();
 
     return 0;
 }

@@ -24,11 +24,23 @@ struct AirCraftStats {
     unsigned fault_count;
     unsigned total_distance;
     unsigned passenger_miles;
+    friend std::ostream& operator<<(std::ostream& stream, const AirCraftStats& stats);
 };
+
+std::ostream& operator<<(std::ostream& stream, const AirCraftStats& stats)
+{
+    return stream << std::setw(10) << stats.company
+                  << std::setw(8) << stats.count
+                  << std::fixed << std::setprecision(3)
+                  << std::setw(12) << stats.fly_time
+                  << std::setw(12) << stats.charge_time
+                  << std::setw(10) << stats.total_distance
+                  << std::setw(16) << stats.passenger_miles
+                  << std::setw(8) << stats.fault_count << endl;
+}
 
 class AirCraftInfo {
 public:
-
     AirCraftInfo(string builder, unsigned cruise_speed, unsigned battery_capacity, float charge_time, float energy_per_mile, unsigned num_passenger, float faults_per_hour)
         : company_(builder)
         , cruise_speed_(cruise_speed)
@@ -51,7 +63,6 @@ public:
     const std::chrono::milliseconds fight_time_per_charge_;
 
 private:
-
     const std::chrono::milliseconds get_flight_time_per_charge()
     {
         float miles_per_charge = battery_capacity_ / energy_use_at_cruise_;
@@ -65,7 +76,7 @@ private:
 
 class AirCraft {
 public:
-    AirCraft(unsigned id, std::shared_ptr<AirCraftInfo>& info, std::shared_ptr<ChargingBay> bay)
+    AirCraft(unsigned id, const AirCraftInfo& info, std::shared_ptr<ChargingBay> bay)
         : craft_info_(info)
         , evtol_id_(id)
     {
@@ -82,17 +93,17 @@ public:
 
     unsigned long get_passenger_miles() const
     {
-        return craft_info_->passenger_count_ * flying_time_ * craft_info_->cruise_speed_;
+        return craft_info_.passenger_count_ * flying_time_ * craft_info_.cruise_speed_;
     }
 
     unsigned get_faults() const
     {
-        return std::ceil(craft_info_->faults_per_hour_ * flying_time_);
+        return std::ceil(craft_info_.faults_per_hour_ * flying_time_);
     }
 
     unsigned get_distance() const
     {
-        return flying_time_ * craft_info_->cruise_speed_;
+        return flying_time_ * craft_info_.cruise_speed_;
     }
 
     unsigned get_charging_time() const
@@ -105,9 +116,10 @@ public:
         return flying_time_;
     }
 
-    AirCraftStats get_stats() {
+    AirCraftStats get_stats()
+    {
         auto stats = AirCraftStats();
-        stats.company = craft_info_->company_;
+        stats.company = craft_info_.company_;
         stats.fault_count = get_faults();
         stats.fly_time = get_flying_time();
         stats.total_distance = get_distance();
@@ -119,7 +131,6 @@ public:
     void start_simulation()
     {
         while (!end_simulation_) {
-            cout << evtol_id_ << ": " << state_ << " --> ";
             switch (state_) {
             case DOCKED:
                 state_ = CRUISING;
@@ -136,16 +147,14 @@ public:
                 cout << "WARN: Invalid aircraft state" << endl;
                 break;
             }
-            cout << state_ << endl;
         }
-        cout << evtol_id_ << ": " << state_ << " --> DOCKED";
         state_ = DOCKED;
     }
 
     void stop_simulation()
     {
         end_simulation_ = true;
-        cv.notify_all();
+        cv.notify_one();
     }
 
 private:
@@ -173,35 +182,38 @@ private:
     bool end_simulation_;
     unsigned flying_time_;
     unsigned charging_time_;
+    const AirCraftInfo& craft_info_;
     std::shared_ptr<ChargingBay> charging_bay_;
-    std::shared_ptr<AirCraftInfo>& craft_info_;
 
     const unsigned evtol_id_;
+    std::mutex aircraft_lock;
     std::condition_variable cv;
-    std::unique_lock<mutex> lock;
     std::function<bool()> predicate = [&] { return end_simulation_; };
 
-    bool cruise_aircraft()
+    void cruise_aircraft()
     {
+        std::unique_lock<mutex> lock(aircraft_lock);
+
         auto start = chrono::system_clock::now();
-        cv.wait_for(lock, craft_info_->fight_time_per_charge_, predicate);
+        cv.wait_for(lock, craft_info_.fight_time_per_charge_, predicate);
         auto duration = chrono::system_clock::now() - start;
 
         // track time spent flying - its possible simulation ends here,
         // so explicitly profile time taken after condition_variable returns
         flying_time_ += duration.count();
-        return !predicate();
     }
 
-    bool charge_aircraft()
+    void charge_aircraft()
     {
+        std::unique_lock<mutex> lock(aircraft_lock);
+
         auto start = chrono::system_clock::now();
 
         // get a charger
         charging_bay_->take_charger();
 
         // charge the aircraft
-        auto charge_time_in_msec = chrono::milliseconds(craft_info_->time_to_charge_ * 1000);
+        auto charge_time_in_msec = chrono::milliseconds(craft_info_.time_to_charge_);
         cv.wait_for(lock, charge_time_in_msec, predicate);
 
         // release charger
@@ -211,8 +223,6 @@ private:
 
         // total time spent for charging including wait
         charging_time_ += duration.count();
-
-        return !predicate();
     }
 
     friend std::ostream& operator<<(std::ostream& stream, const AirCraft& craft);
@@ -220,7 +230,8 @@ private:
 
 std::ostream& operator<<(std::ostream& stream, const AirCraftInfo& craft)
 {
-    return stream << "\ncruise speed      : " << craft.cruise_speed_
+    return stream << "\naircraft maker    : " << craft.company_
+                  << "\ncruise speed      : " << craft.cruise_speed_
                   << "\nbattery capacity  : " << craft.battery_capacity_
                   << "\ntime to charge    : " << craft.time_to_charge_
                   << "\nenergy per mile   : " << craft.energy_use_at_cruise_
@@ -231,13 +242,11 @@ std::ostream& operator<<(std::ostream& stream, const AirCraftInfo& craft)
 
 std::ostream& operator<<(std::ostream& stream, const AirCraft& craft)
 {
-    return stream << "\nID         : " << craft.evtol_id_
-                  << "\nSTATE      : " << craft.state_
-                  << "\nCRUISE_TIME: " << craft.flying_time_
-                  << "\nCHARGE_TIME: " << craft.charging_time_
-#if 1
+    return stream << "\nID                : " << craft.evtol_id_
+                  << "\nSTATE             : " << craft.state_
+                  << "\nCRUISE_TIME       : " << craft.flying_time_
+                  << "\nCHARGE_TIME       : " << craft.charging_time_
                   << craft.craft_info_
-#endif
                   << endl;
 }
 
