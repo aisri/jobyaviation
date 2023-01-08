@@ -108,6 +108,7 @@ public:
     void print_stats()
     {
         std::unordered_map<string, AirCraftStats> results;
+        cout << ">>> per aircraft stats <<<" << endl;
         for (auto& dcraft : deployed_crafts_) {
             auto stats = dcraft->get_stats();
             cout << stats;
@@ -125,6 +126,7 @@ public:
             }
         }
 
+        cout << "\n>>> ----- SUMMARY ----- <<<" << endl;
         cout << std::setw(10) << "COMPANY" << std::setw(8) << "#CRAFTS"
              << std::setw(15) << "FLIGHT-TIME:ms" << std::setw(15) << "CHARGE-TIME:ms"
              << std::setw(10) << "DISTANCE" << std::setw(16) << "PASSENGER-MILES"
