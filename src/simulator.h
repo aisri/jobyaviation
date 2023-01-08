@@ -135,7 +135,7 @@ public:
             stats.fly_time /= (cnt * 1000);
             stats.charge_time /= (cnt * 1000);
             stats.total_distance /= (cnt * 1000);
-            stats.passenger_miles *= (cnt / 1000);
+            stats.passenger_miles *= cnt;
             stats.fault_count /= (cnt * 1000);
             cout << stats;
         }

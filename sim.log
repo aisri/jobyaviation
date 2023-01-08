@@ -1,0 +1,310 @@
+sim/evtolsim data/simulation.json
+*** Starting Simulation ***
+>>> Deploying AirCraft <<<
+ID                : 0
+STATE             : DOCKED
+CRUISE_TIME       : 0
+CHARGE_TIME       : 0
+aircraft maker    : alpha
+cruise speed      : 120
+battery capacity  : 320
+time to charge    : 600
+energy per mile   : 1.6
+passenger count   : 4
+faults per hour   : 0.25
+flight time/charge: 1667
+
+>>> Deploying AirCraft <<<
+ID                : 1
+STATE             : DOCKED
+CRUISE_TIME       : 0
+CHARGE_TIME       : 0
+aircraft maker    : delta
+cruise speed      : 90
+battery capacity  : 120
+time to charge    : 620
+energy per mile   : 0.8
+passenger count   : 2
+faults per hour   : 0.22
+flight time/charge: 1667
+
+>>> Deploying AirCraft <<<
+ID                : 2
+STATE             : DOCKED
+CRUISE_TIME       : 0
+CHARGE_TIME       : 0
+aircraft maker    : charlie
+cruise speed      : 160
+battery capacity  : 220
+time to charge    : 800
+energy per mile   : 2.2
+passenger count   : 3
+faults per hour   : 0.05
+flight time/charge: 625
+
+>>> Deploying AirCraft <<<
+ID                : 3
+STATE             : DOCKED
+CRUISE_TIME       : 0
+CHARGE_TIME       : 0
+aircraft maker    : charlie
+cruise speed      : 160
+battery capacity  : 220
+time to charge    : 800
+energy per mile   : 2.2
+passenger count   : 3
+faults per hour   : 0.05
+flight time/charge: 625
+
+>>> Deploying AirCraft <<<
+ID                : 4
+STATE             : DOCKED
+CRUISE_TIME       : 0
+CHARGE_TIME       : 0
+aircraft maker    : bravo
+cruise speed      : 100
+battery capacity  : 100
+time to charge    : 200
+energy per mile   : 1.5
+passenger count   : 5
+faults per hour   : 0.1
+flight time/charge: 667
+
+>>> Deploying AirCraft <<<
+ID                : 5
+STATE             : DOCKED
+CRUISE_TIME       : 0
+CHARGE_TIME       : 0
+aircraft maker    : charlie
+cruise speed      : 160
+battery capacity  : 220
+time to charge    : 800
+energy per mile   : 2.2
+passenger count   : 3
+faults per hour   : 0.05
+flight time/charge: 625
+
+>>> Deploying AirCraft <<<
+ID                : 6
+STATE             : DOCKED
+CRUISE_TIME       : 0
+CHARGE_TIME       : 0
+aircraft maker    : delta
+cruise speed      : 90
+battery capacity  : 120
+time to charge    : 620
+energy per mile   : 0.8
+passenger count   : 2
+faults per hour   : 0.22
+flight time/charge: 1667
+
+>>> Deploying AirCraft <<<
+ID                : 7
+STATE             : DOCKED
+CRUISE_TIME       : 0
+CHARGE_TIME       : 0
+aircraft maker    : alpha
+cruise speed      : 120
+battery capacity  : 320
+time to charge    : 600
+energy per mile   : 1.6
+passenger count   : 4
+faults per hour   : 0.25
+flight time/charge: 1667
+
+>>> Deploying AirCraft <<<
+ID                : 8
+STATE             : DOCKED
+CRUISE_TIME       : 0
+CHARGE_TIME       : 0
+aircraft maker    : charlie
+cruise speed      : 160
+battery capacity  : 220
+time to charge    : 800
+energy per mile   : 2.2
+passenger count   : 3
+faults per hour   : 0.05
+flight time/charge: 625
+
+>>> Deploying AirCraft <<<
+ID                : 9
+STATE             : DOCKED
+CRUISE_TIME       : 0
+CHARGE_TIME       : 0
+aircraft maker    : echo
+cruise speed      : 30
+battery capacity  : 150
+time to charge    : 300
+energy per mile   : 5.8
+passenger count   : 2
+faults per hour   : 0.61
+flight time/charge: 862
+
+>>> Deploying AirCraft <<<
+ID                : 10
+STATE             : DOCKED
+CRUISE_TIME       : 0
+CHARGE_TIME       : 0
+aircraft maker    : echo
+cruise speed      : 30
+battery capacity  : 150
+time to charge    : 300
+energy per mile   : 5.8
+passenger count   : 2
+faults per hour   : 0.61
+flight time/charge: 862
+
+>>> Deploying AirCraft <<<
+ID                : 11
+STATE             : DOCKED
+CRUISE_TIME       : 0
+CHARGE_TIME       : 0
+aircraft maker    : echo
+cruise speed      : 30
+battery capacity  : 150
+time to charge    : 300
+energy per mile   : 5.8
+passenger count   : 2
+faults per hour   : 0.61
+flight time/charge: 862
+
+>>> Deploying AirCraft <<<
+ID                : 12
+STATE             : DOCKED
+CRUISE_TIME       : 0
+CHARGE_TIME       : 0
+aircraft maker    : charlie
+cruise speed      : 160
+battery capacity  : 220
+time to charge    : 800
+energy per mile   : 2.2
+passenger count   : 3
+faults per hour   : 0.05
+flight time/charge: 625
+
+>>> Deploying AirCraft <<<
+ID                : 13
+STATE             : DOCKED
+CRUISE_TIME       : 0
+CHARGE_TIME       : 0
+aircraft maker    : alpha
+cruise speed      : 120
+battery capacity  : 320
+time to charge    : 600
+energy per mile   : 1.6
+passenger count   : 4
+faults per hour   : 0.25
+flight time/charge: 1667
+
+>>> Deploying AirCraft <<<
+ID                : 14
+STATE             : DOCKED
+CRUISE_TIME       : 0
+CHARGE_TIME       : 0
+aircraft maker    : echo
+cruise speed      : 30
+battery capacity  : 150
+time to charge    : 300
+energy per mile   : 5.8
+passenger count   : 2
+faults per hour   : 0.61
+flight time/charge: 862
+
+>>> Deploying AirCraft <<<
+ID                : 15
+STATE             : DOCKED
+CRUISE_TIME       : 0
+CHARGE_TIME       : 0
+aircraft maker    : alpha
+cruise speed      : 120
+battery capacity  : 320
+time to charge    : 600
+energy per mile   : 1.6
+passenger count   : 4
+faults per hour   : 0.25
+flight time/charge: 1667
+
+>>> Deploying AirCraft <<<
+ID                : 16
+STATE             : DOCKED
+CRUISE_TIME       : 0
+CHARGE_TIME       : 0
+aircraft maker    : echo
+cruise speed      : 30
+battery capacity  : 150
+time to charge    : 300
+energy per mile   : 5.8
+passenger count   : 2
+faults per hour   : 0.61
+flight time/charge: 862
+
+>>> Deploying AirCraft <<<
+ID                : 17
+STATE             : DOCKED
+CRUISE_TIME       : 0
+CHARGE_TIME       : 0
+aircraft maker    : delta
+cruise speed      : 90
+battery capacity  : 120
+time to charge    : 620
+energy per mile   : 0.8
+passenger count   : 2
+faults per hour   : 0.22
+flight time/charge: 1667
+
+>>> Deploying AirCraft <<<
+ID                : 18
+STATE             : DOCKED
+CRUISE_TIME       : 0
+CHARGE_TIME       : 0
+aircraft maker    : echo
+cruise speed      : 30
+battery capacity  : 150
+time to charge    : 300
+energy per mile   : 5.8
+passenger count   : 2
+faults per hour   : 0.61
+flight time/charge: 862
+
+>>> Deploying AirCraft <<<
+ID                : 19
+STATE             : DOCKED
+CRUISE_TIME       : 0
+CHARGE_TIME       : 0
+aircraft maker    : bravo
+cruise speed      : 100
+battery capacity  : 100
+time to charge    : 200
+energy per mile   : 1.5
+passenger count   : 5
+faults per hour   : 0.1
+flight time/charge: 667
+
+*** Stopping Simulation ***
+*** Simulation Report ***
+     alpha       0           3340           3691    400800         1603200     835
+     delta       0           3342           3657    300780          601560     736
+   charlie       0           1259           5773    201440          604320      63
+   charlie       0           2515           4515    402400         1207200     126
+     bravo       0           2675           4355    267500         1337500     268
+   charlie       0           3134           3894    501440         1504320     157
+     delta       0           5013           2018    451170          902340    1103
+     alpha       0           3339           3660    400680         1602720     835
+   charlie       0           1947           5050    311520          934560      98
+      echo       0           3460           3538    103800          207600    2111
+      echo       0           4153           2844    124590          249180    2534
+      echo       0           3939           3057    118170          236340    2403
+   charlie       0           1883           5148    301280          903840      95
+     alpha       0           3343           3657    401160         1604640     836
+      echo       0           3457           3541    103710          207420    2109
+     alpha       0           4815           2184    577800         2311200    1204
+      echo       0           3456           3574    103680          207360    2109
+     delta       0           3713           3285    334170          668340     817
+      echo       0           3842           3154    115260          230520    2344
+     bravo       0           2008           5024    200800         1004000     201
+   COMPANY #CRAFTS FLIGHT-TIME:ms CHARGE-TIME:ms  DISTANCE PASSENGER-MILES  FAULTS
+   charlie       5              2              4       343        25771200       0
+     delta       3              4              2       362         6516720       0
+      echo       6              3              3       111         8030520       2
+     bravo       2              2              4       234         4683000       0
+     alpha       4              3              3       445        28487040       0
