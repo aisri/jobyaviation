@@ -136,7 +136,7 @@ private:
 
         cout << "\n>>> ----- SUMMARY ----- <<<" << endl;
         cout << std::setw(10) << "COMPANY" << std::setw(8) << "#CRAFTS"
-             << std::setw(15) << "FLIGHT-TIME:ms" << std::setw(15) << "CHARGE-TIME:ms"
+             << std::setw(12) << "FLIGHT-TIME" << std::setw(12) << "CHARGE-TIME"
              << std::setw(10) << "DISTANCE" << std::setw(16) << "PASSENGER-MILES"
              << std::setw(8) << "FAULTS" << endl;
 
