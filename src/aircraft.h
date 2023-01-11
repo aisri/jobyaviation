@@ -32,8 +32,8 @@ std::ostream& operator<<(std::ostream& stream, const AirCraftStats& stats)
     return stream << std::setw(10) << stats.company
                   << std::setw(8) << stats.count
                   << std::fixed << std::setprecision(3)
-                  << std::setw(15) << stats.fly_time
-                  << std::setw(15) << stats.charge_time
+                  << std::setw(12) << stats.fly_time
+                  << std::setw(12) << stats.charge_time
                   << std::setw(10) << stats.total_distance
                   << std::setw(16) << stats.passenger_miles
                   << std::setw(8) << stats.fault_count << endl;
